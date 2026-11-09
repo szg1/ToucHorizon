@@ -1,0 +1,70 @@
+# ToucHorizon: the player's hotbar and inventory on a Mac's Touch Bar.
+# Tap a hotbar item to select it; tap an inventory item to swap it into the selected slot;
+# the arrows button swaps the selected slot with the off hand.
+[mod]
+id = "touchorizon"
+version = "0.1.0"
+priority = 100
+
+# The module reads the player's inventory and clicks the inventory menu through the game's own
+# code (game.rs), which isn't a stable hook point: the mod is pinned to the Nightly it was made on
+# (nightly-2026-11-08-fdc87ae). docs/native-mods.md, "Pinned to a Nightly".
+[compatibility]
+horizon_revision = "fdc87aecdbd116bf1e08adcd062fcbaea8c2e2ca"
+
+# The game side: a child module of `game`, so it reaches the inventory and the menu clicks.
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "touchorizon"
+source = "runtime.rs"
+
+# The Touch Bar itself (AppKit through objc2), compiled and cached apart from the game.
+[[crate]]
+id = "appkit"
+path = "appkit"
+
+# Every frame, on the main thread: apply taps, show the inventory.
+[[injection]]
+id = "frame"
+hook = "frame"
+hook_version = 1
+kind = "HEAD"
+helper = "frame.rs"
+bindings = [{ name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" }]
+
+# The row in Options > Mods.
+[[injection]]
+id = "list"
+hook = "mods"
+hook_version = 1
+kind = "HEAD"
+helper = "list.rs"
+bindings = [
+  { name = "mods", ty = "&mut Vec<crate::game::native_hooks::NativeMod>", value = "&mut *mods" },
+]
+
+# Its settings page.
+[[injection]]
+id = "settings"
+hook = "settings"
+hook_version = 1
+kind = "HEAD"
+helper = "settings.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "mod_id", ty = "&str", value = "mod_id" },
+  { name = "buttons", ty = "&mut Vec<String>", value = "&mut *buttons" },
+]
+
+[[injection]]
+id = "click"
+hook = "settings_click"
+hook_version = 1
+kind = "HEAD"
+helper = "click.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "mod_id", ty = "&str", value = "mod_id" },
+  { name = "button", ty = "usize", value = "button" },
+]

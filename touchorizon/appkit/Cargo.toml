@@ -1,0 +1,18 @@
+[package]
+name = "touchorizon-appkit"
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "MIT"
+description = "ToucHorizon's Touch Bar: an NSTouchBar with the player's hotbar and inventory"
+
+# Only crates in Horizon's Cargo.lock, by version requirement (docs/native-mods.md, "The mod's
+# crate"): objc2 and block2 are there for winit, png and serde_json for the game itself. AppKit is
+# reached with plain messages, so no objc2-app-kit features are turned on and the staged lock
+# gains nothing. Bundle crates can't have [target.…] tables, so objc2 is a plain dependency and
+# the mod builds on macOS only (the Touch Bar is a Mac's anyway).
+[dependencies]
+png = "0.18"
+serde_json = "1"
+objc2 = "0.6"
+block2 = "0.6"
