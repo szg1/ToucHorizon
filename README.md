@@ -1,14 +1,11 @@
+<img src="icon.png" width="128" alt="ToucHorizon icon" align="right">
+
 # ToucHorizon
 
 A native mod for [Horizon](https://playhorizon.dev), the Rust rewrite of Minecraft: Java
 Edition, that puts your **hotbar and inventory on the Touch Bar** of a MacBook Pro.
 
-```
-┌────────────────────────────────────────────────────────────────────┬────┐
-│ [1⚔] [2⛏] [3▦64] [4▦37] [5ı16] … [9▦3] │ [▦21] [·] [▦64] [◉4] …  ◀▶ │ ⇄  │
-│  hotbar (lighter tiles, numbered)      │  main inventory (scrolls)   │    │
-└────────────────────────────────────────────────────────────────────┴────┘
-```
+![ToucHorizon on the Touch Bar](screenshots/touchbar.png)
 
 - **Tap a hotbar item** to select it, as its number key does.
 - **Tap an inventory item** to swap it into the selected hotbar slot, as pressing the slot's
